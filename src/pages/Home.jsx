@@ -1,5 +1,6 @@
 
 import "../styles/Home.css";
+import StoreHeader from "../components/StoreHeader";
 
 const products = [
   {
@@ -29,36 +30,7 @@ function Home({ onLogin, onSignup }) {
   return (
     <div className="home-page">
       {/* Header */}
-      <header className="home-header">
-        <a href="#home" className="home-logo">
-          Try<span>First</span>
-          <span className="logo-dot">.</span>
-        </a>
-
-        <nav className="home-nav">
-          <a href="#home">Home</a>
-          <a href="#categories">Categories</a>
-          <a href="#how-it-works">How It Works</a>
-        </nav>
-
-        <div className="home-auth-buttons">
-          <button
-            type="button"
-            className="login-button"
-            onClick={onLogin}
-          >
-            Log In
-          </button>
-
-          <button
-            type="button"
-            className="signup-button"
-            onClick={onSignup}
-          >
-            Sign Up
-          </button>
-        </div>
-      </header>
+      <StoreHeader activePage="home" onLogin={onLogin} onSignup={onSignup} />
 
       <main>
         {/* Hero */}
@@ -81,7 +53,7 @@ function Home({ onLogin, onSignup }) {
             </p>
 
             <div className="hero-buttons">
-              <a href="#categories" className="primary-hero-button">
+              <a href="/catalog" className="primary-hero-button">
                 Explore Collection <span>↗</span>
               </a>
 
@@ -192,7 +164,7 @@ function Home({ onLogin, onSignup }) {
                   </div>
 
                   <a
-                    href="#how-it-works"
+                    href={`/catalog?category=${product.name === "Watches" ? "watches" : product.name === "Bags" ? "bags" : "footwear"}`}
                     className="category-link"
                     aria-label={`Explore ${product.name}`}
                   >
