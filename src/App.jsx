@@ -23,15 +23,6 @@ export default function App() {
   const pathname = window.location.pathname;
   const productMatch = pathname.match(/^\/products\/([^/]+)\/?$/);
 
-  if (page === "home") {
-    return (
-      <Home
-        onLogin={() => setPage("login")}
-        onSignup={() => setPage("signup")}
-      />
-    );
-  }
-
   if (page === "signup") {
     return (
       <Signup
@@ -45,6 +36,16 @@ export default function App() {
     return (
       <ForgotPassword
         onBackToLogin={() => setPage("login")}
+      />
+    );
+  }
+
+  if (page === "login") {
+    return (
+      <Login
+        onLogin={handleLogin}
+        onShowSignup={() => setPage("signup")}
+        onForgotPassword={() => setPage("forgot")}
       />
     );
   }
@@ -71,10 +72,9 @@ export default function App() {
   }
 
   return (
-    <Login
-      onLogin={handleLogin}
-      onShowSignup={() => setPage("signup")}
-      onForgotPassword={() => setPage("forgot")}
+    <Home
+      onLogin={() => setPage("login")}
+      onSignup={() => setPage("signup")}
     />
   );
 }
