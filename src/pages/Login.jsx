@@ -18,25 +18,32 @@ export default function Login({
     const form = event.currentTarget;
     const emailInput = form.elements.namedItem("email");
     const passwordInput = form.elements.namedItem("password");
-    const email = emailInput.value.trim();
+
+    const email = emailInput.value.trim().toLowerCase();
     const password = passwordInput.value;
 
+    // Check empty fields
     if (!email || !password) {
       setError("Please enter your email and password.");
       return;
     }
 
+    // Validate email format
     if (!emailInput.checkValidity()) {
       setError("Please enter a valid email address.");
       return;
     }
 
-    if (password.length < 8) {
-      setError("Your password must contain at least 8 characters.");
-      return;
-    }
+    // Demo login credentials
+    const demoEmail = "mahad@gmail.com";
+    const demoPassword = "M@had123";
 
-    onLogin();
+    // Check credentials
+    if (email === demoEmail && password === demoPassword) {
+      onLogin();
+    } else {
+      setError("Invalid email or password. Please try again.");
+    }
   };
 
   return (
@@ -82,6 +89,7 @@ export default function Login({
           <form onSubmit={handleSubmit} noValidate>
             <div className="auth-field">
               <label htmlFor="login-email">Email</label>
+
               <input
                 id="login-email"
                 name="email"
@@ -94,7 +102,9 @@ export default function Login({
 
             <div className="auth-field">
               <div className="auth-label-row">
-                <label htmlFor="login-password">Password</label>
+                <label htmlFor="login-password">
+                  Password
+                </label>
 
                 <button
                   className="auth-text-button"
@@ -118,7 +128,9 @@ export default function Login({
                 <button
                   type="button"
                   className="password-toggle"
-                  onClick={() => setShowPassword((previous) => !previous)}
+                  onClick={() =>
+                    setShowPassword((previous) => !previous)
+                  }
                   aria-label={
                     showPassword ? "Hide password" : "Show password"
                   }
