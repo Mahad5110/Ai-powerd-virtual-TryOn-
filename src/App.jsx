@@ -11,8 +11,9 @@ import { getProductById } from "./data/products";
 export default function App() {
   const [page, setPage] = useState("home");
 
+  // Successful login takes the user to homepage
   const handleLogin = () => {
-    alert("Login form validated. Real authentication will be added later.");
+    setPage("home");
   };
 
   const handleSignup = () => {
@@ -21,7 +22,10 @@ export default function App() {
   };
 
   const pathname = window.location.pathname;
-  const productMatch = pathname.match(/^\/products\/([^/]+)\/?$/);
+
+  const productMatch = pathname.match(
+    /^\/products\/([^/]+)\/?$/
+  );
 
   if (page === "signup") {
     return (
@@ -51,10 +55,17 @@ export default function App() {
   }
 
   if (pathname === "/catalog" || pathname === "/catalog/") {
-    const category = new URLSearchParams(window.location.search).get("category");
+    const category = new URLSearchParams(
+      window.location.search
+    ).get("category");
+
     return (
       <Catalog
-        initialCategory={category ? category[0].toUpperCase() + category.slice(1) : "All pieces"}
+        initialCategory={
+          category
+            ? category[0].toUpperCase() + category.slice(1)
+            : "All pieces"
+        }
         onLogin={() => setPage("login")}
         onSignup={() => setPage("signup")}
       />
@@ -64,7 +75,9 @@ export default function App() {
   if (productMatch) {
     return (
       <ProductDetails
-        product={getProductById(decodeURIComponent(productMatch[1]))}
+        product={getProductById(
+          decodeURIComponent(productMatch[1])
+        )}
         onLogin={() => setPage("login")}
         onSignup={() => setPage("signup")}
       />
