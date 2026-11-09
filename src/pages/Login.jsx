@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { signIn } from "../api";
 import "../styles/Auth.css";
 
 export default function Login({
@@ -10,8 +11,9 @@ export default function Login({
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
 
@@ -34,15 +36,15 @@ export default function Login({
       return;
     }
 
-    // Demo login credentials
-    const demoEmail = "mahad@gmail.com";
-    const demoPassword = "M@had123";
+    setIsSubmitting(true);
 
-    // Check credentials
-    if (email === demoEmail && password === demoPassword) {
-      onLogin();
-    } else {
-      setError("Invalid email or password. Please try again.");
+    try {
+      const session = await signIn(email, password);
+      onLogin(session);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -150,8 +152,8 @@ export default function Login({
               </p>
             )}
 
-            <button className="auth-button" type="submit">
-              Log in
+            <button className="auth-button" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Logging in..." : "Log in"}
             </button>
           </form>
 

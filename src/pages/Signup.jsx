@@ -1,14 +1,16 @@
 
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { signUp } from "../api";
 import "../styles/Auth.css";
 
 export default function Signup({ onShowLogin, onSignup }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
 
@@ -51,7 +53,16 @@ export default function Signup({ onShowLogin, onSignup }) {
       return;
     }
 
-    onSignup();
+    setIsSubmitting(true);
+
+    try {
+      const session = await signUp(name, email, password);
+      onSignup(session);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -191,8 +202,8 @@ export default function Signup({ onShowLogin, onSignup }) {
               </p>
             )}
 
-            <button className="auth-button" type="submit">
-              Create account
+            <button className="auth-button" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating account..." : "Create account"}
             </button>
           </form>
 

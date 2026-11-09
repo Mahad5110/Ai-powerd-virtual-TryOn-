@@ -12,13 +12,14 @@ export default function App() {
   const [page, setPage] = useState("home");
 
   // Successful login takes the user to homepage
-  const handleLogin = () => {
+  const handleLogin = (session) => {
+    localStorage.setItem("tryfirst_token", session.token);
     setPage("home");
   };
 
-  const handleSignup = () => {
-    alert("Sign Up form validated. Account storage will be added later.");
-    setPage("login");
+  const handleSignup = (session) => {
+    localStorage.setItem("tryfirst_token", session.token);
+    setPage("home");
   };
 
   const pathname = window.location.pathname;
