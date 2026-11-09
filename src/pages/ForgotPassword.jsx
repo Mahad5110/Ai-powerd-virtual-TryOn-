@@ -1,13 +1,15 @@
 
 import { useState } from "react";
+import { requestPasswordReset } from "../api";
 import "../styles/Auth.css";
 
 export default function ForgotPassword({ onBackToLogin }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setMessage("");
@@ -24,9 +26,16 @@ export default function ForgotPassword({ onBackToLogin }) {
       return;
     }
 
-    setMessage(
-      "Your email is valid. Password reset emails will be enabled when authentication is connected."
-    );
+    setIsSubmitting(true);
+
+    try {
+      const result = await requestPasswordReset(email.trim());
+      setMessage(result.message);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -98,8 +107,8 @@ export default function ForgotPassword({ onBackToLogin }) {
               </p>
             )}
 
-            <button className="auth-button" type="submit">
-              Continue
+            <button className="auth-button" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Sending..." : "Send reset link"}
             </button>
           </form>
 

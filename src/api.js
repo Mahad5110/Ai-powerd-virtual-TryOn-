@@ -40,6 +40,14 @@ export function signUp(name, email, password) {
   return postAuth("signup", { name, email, password });
 }
 
+export function requestPasswordReset(email) {
+  return postAuth("forgot-password", { email });
+}
+
+export function resetPassword(token, password) {
+  return postAuth("reset-password", { token, password });
+}
+
 export async function getCurrentUser(token) {
   let response;
 

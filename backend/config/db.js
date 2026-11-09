@@ -26,6 +26,20 @@ export const initializeDatabase = async () => {
       );
     `);
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS password_reset_tokens (
+        token_hash CHAR(64) PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        expires_at TIMESTAMPTZ NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS password_reset_tokens_user_id_idx
+      ON password_reset_tokens (user_id);
+    `);
+
     console.log("Users table is ready!");
   } catch (error) {
     console.error("Database initialization failed:", error.message);

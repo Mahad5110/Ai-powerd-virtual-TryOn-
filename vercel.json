@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/reset-password", "destination": "/" },
     { "source": "/catalog", "destination": "/" },
     { "source": "/products/(.*)", "destination": "/" }
   ]

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Catalog from "./pages/Catalog";
 import ProductDetails from "./pages/ProductDetails";
 import { getCurrentUser } from "./api";
@@ -68,10 +69,23 @@ export default function App() {
   };
 
   const pathname = window.location.pathname;
+  const resetToken = new URLSearchParams(window.location.search).get("token");
 
   const productMatch = pathname.match(
     /^\/products\/([^/]+)\/?$/
   );
+
+  if (pathname === "/reset-password" || pathname === "/reset-password/") {
+    return (
+      <ResetPassword
+        token={resetToken}
+        onBackToLogin={() => {
+          window.history.replaceState(null, "", "/");
+          setPage("login");
+        }}
+      />
+    );
+  }
 
   if (page === "signup") {
     return (
