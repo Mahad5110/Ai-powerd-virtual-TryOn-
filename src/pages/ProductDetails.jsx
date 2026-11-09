@@ -4,11 +4,11 @@ import StoreHeader from "../components/StoreHeader";
 import { products } from "../data/products";
 import "../styles/Storefront.css";
 
-function ProductDetails({ product, onLogin, onSignup }) {
+function ProductDetails({ product, onLogin, onSignup, user, onLogout }) {
   if (!product) {
     return (
       <div className="storefront-page detail-page">
-        <StoreHeader activePage="catalog" onLogin={onLogin} onSignup={onSignup} />
+        <StoreHeader activePage="catalog" onLogin={onLogin} onSignup={onSignup} user={user} onLogout={onLogout} />
         <main className="detail-not-found"><span className="store-eyebrow">NOT IN THIS EDIT</span><h1>We couldn't find that piece.</h1><a href="/catalog" className="detail-back-link"><ArrowLeft size={17} /> Back to discovery</a></main>
       </div>
     );
@@ -18,7 +18,7 @@ function ProductDetails({ product, onLogin, onSignup }) {
 
   return (
     <div className="storefront-page detail-page">
-      <StoreHeader activePage="catalog" onLogin={onLogin} onSignup={onSignup} />
+      <StoreHeader activePage="catalog" onLogin={onLogin} onSignup={onSignup} user={user} onLogout={onLogout} />
       <main>
         <div className="detail-breadcrumb"><a href="/catalog"><ArrowLeft size={16} /> Back to discovery</a><span>/</span><a href={`/catalog?category=${encodeURIComponent(product.category)}`}>{product.category}</a><span>/</span><span>{product.name}</span></div>
 

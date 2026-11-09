@@ -39,3 +39,33 @@ export function signIn(email, password) {
 export function signUp(name, email, password) {
   return postAuth("signup", { name, email, password });
 }
+
+export async function getCurrentUser(token) {
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch {
+    throw new Error("Could not connect to the server. Please try again.");
+  }
+
+  let result;
+
+  try {
+    result = await response.json();
+  } catch {
+    throw new Error("The server returned an invalid response. Please try again.");
+  }
+
+  if (!response.ok) {
+    const error = new Error(result.message || "Could not load your profile.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return result;
+}

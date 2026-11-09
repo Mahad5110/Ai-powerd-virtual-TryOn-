@@ -8,7 +8,7 @@ import "../styles/Storefront.css";
 const PAGE_SIZE = 6;
 const brands = [...new Set(products.map((product) => product.brand))].sort();
 
-function Catalog({ onLogin, onSignup, initialCategory = "All pieces" }) {
+function Catalog({ onLogin, onSignup, user, onLogout, initialCategory = "All pieces" }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(
     categories.includes(initialCategory) ? initialCategory : "All pieces",
@@ -56,7 +56,7 @@ function Catalog({ onLogin, onSignup, initialCategory = "All pieces" }) {
 
   return (
     <div className="storefront-page catalog-page">
-      <StoreHeader activePage="catalog" onLogin={onLogin} onSignup={onSignup} />
+      <StoreHeader activePage="catalog" onLogin={onLogin} onSignup={onSignup} user={user} onLogout={onLogout} />
       <main>
         <section className="catalog-intro">
           <div className="catalog-intro-inner">

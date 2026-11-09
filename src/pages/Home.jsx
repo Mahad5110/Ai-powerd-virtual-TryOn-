@@ -26,11 +26,11 @@ const products = [
   },
 ];
 
-function Home({ onLogin, onSignup }) {
+function Home({ onLogin, onSignup, user, onLogout }) {
   return (
     <div className="home-page">
       {/* Header */}
-      <StoreHeader activePage="home" onLogin={onLogin} onSignup={onSignup} />
+      <StoreHeader activePage="home" onLogin={onLogin} onSignup={onSignup} user={user} onLogout={onLogout} />
 
       <main>
         {/* Hero */}
