@@ -8,21 +8,30 @@ const RESET_TOKEN_LIFETIME_MINUTES = 30;
 const hashToken = (token) =>
   createHash("sha256").update(token).digest("hex");
 
+const getFrontendUrl = () => {
+  const configuredUrl = process.env.FRONTEND_URL || process.env.CLIENT_URL;
+
+  if (!configuredUrl) {
+    throw new Error("FRONTEND_URL or CLIENT_URL must be configured for password reset.");
+  }
+
+  const frontendUrl = new URL(configuredUrl);
+  if (frontendUrl.protocol !== "https:" && frontendUrl.hostname !== "localhost") {
+    throw new Error("The frontend URL must use HTTPS outside localhost.");
+  }
+
+  return frontendUrl;
+};
+
 const sendResetEmail = async (email, resetUrl) => {
   const {
     BREVO_SMTP_USER,
     BREVO_SMTP_PASSWORD,
     BREVO_SENDER_EMAIL,
-    FRONTEND_URL,
   } = process.env;
 
-  if (!BREVO_SMTP_USER || !BREVO_SMTP_PASSWORD || !BREVO_SENDER_EMAIL || !FRONTEND_URL) {
+  if (!BREVO_SMTP_USER || !BREVO_SMTP_PASSWORD || !BREVO_SENDER_EMAIL) {
     throw new Error("Brevo password-reset email settings are incomplete.");
-  }
-
-  const frontendUrl = new URL(FRONTEND_URL);
-  if (frontendUrl.protocol !== "https:" && frontendUrl.hostname !== "localhost") {
-    throw new Error("FRONTEND_URL must use HTTPS outside localhost.");
   }
 
   const smtpPort = Number(process.env.BREVO_SMTP_PORT || 587);
@@ -80,6 +89,7 @@ export const requestPasswordReset = async (req, res) => {
     }
 
     const user = userResult.rows[0];
+    const frontendUrl = getFrontendUrl();
     const recentRequest = await pool.query(
       `SELECT 1
        FROM password_reset_tokens
@@ -107,7 +117,6 @@ export const requestPasswordReset = async (req, res) => {
       [tokenHash, user.id, RESET_TOKEN_LIFETIME_MINUTES]
     );
 
-    const frontendUrl = new URL(process.env.FRONTEND_URL);
     frontendUrl.pathname = "/reset-password";
     frontendUrl.search = new URLSearchParams({ token }).toString();
 
