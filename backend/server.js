@@ -15,6 +15,7 @@ const app = express();
 app.use(cors({
   origin: [
     process.env.CLIENT_URL,
+    "https://ai-powerd-virtual-try-on-three.vercel.app",
     "http://localhost:5173"
   ].filter(Boolean)
 }));
