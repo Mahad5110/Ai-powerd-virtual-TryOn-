@@ -15,7 +15,7 @@ function ProductCard({ product }) {
         </div>
         <a className="product-card-title" href={`/products/${product.id}`}>{product.name}</a>
         <div className="product-card-bottom">
-          <span className="product-price">${product.price.toFixed(2)}</span>
+          <span className="product-price">PKR {product.price.toLocaleString()}</span>
           <span className="product-color">{product.color}</span>
         </div>
       </div>

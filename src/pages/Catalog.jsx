@@ -120,11 +120,11 @@ function Catalog({ onLogin, onSignup, user, onLogout, initialCategory = "All pie
                   </select>
                 </label>
                 <fieldset className="filter-group price-filter">
-                  <legend className="filter-label">Price range</legend>
+                  <legend className="filter-label">Price range (PKR)</legend>
                   <div className="price-inputs">
-                    <label><span>$</span><input aria-label="Minimum price" type="number" min="0" placeholder="Min" value={minimumPrice} onChange={(event) => { setMinimumPrice(event.target.value); setPage(1); }} /></label>
+                    <label><span>PKR</span><input aria-label="Minimum price in PKR" type="number" min="0" placeholder="Min" value={minimumPrice} onChange={(event) => { setMinimumPrice(event.target.value); setPage(1); }} /></label>
                     <span className="price-range-dash">to</span>
-                    <label><span>$</span><input aria-label="Maximum price" type="number" min="0" placeholder="Max" value={maximumPrice} onChange={(event) => { setMaximumPrice(event.target.value); setPage(1); }} /></label>
+                    <label><span>PKR</span><input aria-label="Maximum price in PKR" type="number" min="0" placeholder="Max" value={maximumPrice} onChange={(event) => { setMaximumPrice(event.target.value); setPage(1); }} /></label>
                   </div>
                 </fieldset>
                 <button className="reset-filters" type="button" onClick={resetFilters}>Reset all filters</button>
