@@ -28,7 +28,7 @@ function ProductDetails({ product, onLogin, onSignup, user, onLogout }) {
             <span className="store-eyebrow">{product.brand} / {product.category}</span>
             <h1>{product.name}</h1>
             <div className="detail-rating"><span><Star size={15} fill="currentColor" /> {product.rating.toFixed(1)}</span><span>{product.reviewCount} reviews</span></div>
-            <p className="detail-price">${product.price.toFixed(2)}</p>
+            <p className="detail-price">PKR {product.price.toLocaleString()}</p>
             <p className="detail-description">{product.description}</p>
             <div className="detail-color"><span>COLOR</span><strong>{product.color}</strong></div>
             <div className="detail-actions">

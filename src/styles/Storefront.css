@@ -278,11 +278,19 @@
   padding: 0 8px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   border: 1px solid var(--store-line);
   background: var(--store-white);
   color: var(--store-muted);
   font-size: 11px;
+}
+
+.price-inputs label span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--store-muted);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
 .price-inputs input {
