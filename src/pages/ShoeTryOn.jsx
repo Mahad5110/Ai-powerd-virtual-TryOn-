@@ -6,17 +6,30 @@ import {
   Footprints,
   X,
   ImagePlus,
+  Check,
 } from "lucide-react";
 
+import { products } from "../data/products";
 import "../styles/ShoeTryOn.css";
 
 export default function ShoeTryOn({ onHome }) {
   const [selectedMode, setSelectedMode] = useState("upload");
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [selectedShoeId, setSelectedShoeId] = useState("veja-esplar");
   const [error, setError] = useState("");
 
   const fileInputRef = useRef(null);
 
+  // Get actual footwear products from the existing product data
+  const footwearProducts = products.filter(
+    (product) => product.category === "Footwear"
+  );
+
+  const selectedShoe = footwearProducts.find(
+    (product) => product.id === selectedShoeId
+  );
+
+  // Upload foot photo
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
 
@@ -49,6 +62,7 @@ export default function ShoeTryOn({ onHome }) {
     reader.readAsDataURL(file);
   };
 
+  // Remove uploaded photo
   const handleRemoveImage = () => {
     setUploadedImage(null);
     setError("");
@@ -60,6 +74,7 @@ export default function ShoeTryOn({ onHome }) {
 
   return (
     <div className="shoe-tryon-page">
+      {/* Header */}
       <header className="shoe-header">
         <h2>
           TryFirst<span>.</span>
@@ -72,6 +87,7 @@ export default function ShoeTryOn({ onHome }) {
       </header>
 
       <main className="shoe-container">
+        {/* Introduction */}
         <section className="shoe-intro">
           <p className="shoe-eyebrow">
             YOUR VIRTUAL FITTING ROOM
@@ -84,6 +100,7 @@ export default function ShoeTryOn({ onHome }) {
           </p>
         </section>
 
+        {/* Upload and Camera Modes */}
         <section className="shoe-mode-section">
           <button
             type="button"
@@ -116,6 +133,7 @@ export default function ShoeTryOn({ onHome }) {
           </button>
         </section>
 
+        {/* Try-On Preview */}
         <section className="shoe-preview-section">
           <h2>Your Try-On Preview</h2>
 
@@ -124,7 +142,7 @@ export default function ShoeTryOn({ onHome }) {
               <div style={{ width: "100%" }}>
                 <img
                   src={uploadedImage}
-                  alt="Uploaded feet preview"
+                  alt="Uploaded foot preview"
                   style={{
                     display: "block",
                     width: "100%",
@@ -143,8 +161,11 @@ export default function ShoeTryOn({ onHome }) {
                     border: "none",
                     borderRadius: "8px",
                     backgroundColor: "#123D32",
-                    color: "#ffffff",
+                    color: "white",
                     cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "7px",
                   }}
                 >
                   <X size={16} />
@@ -166,14 +187,7 @@ export default function ShoeTryOn({ onHome }) {
           </div>
 
           {error && (
-            <p
-              role="alert"
-              style={{
-                color: "#c0392b",
-                marginTop: "12px",
-                textAlign: "center",
-              }}
-            >
+            <p style={{ color: "#c0392b", textAlign: "center" }}>
               {error}
             </p>
           )}
@@ -204,15 +218,148 @@ export default function ShoeTryOn({ onHome }) {
           )}
         </section>
 
+        {/* Actual Footwear Products */}
         <section className="shoe-selection-section">
           <h2>Choose Your Shoes</h2>
 
-          <div className="shoe-categories">
-            <button>Sneakers</button>
-            <button>Formal</button>
-            <button>Casual</button>
+          <p style={{ color: "#777B72", marginBottom: "20px" }}>
+            Select a pair from our TryFirst footwear collection.
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
+              gap: "20px",
+            }}
+          >
+            {footwearProducts.map((shoe) => (
+              <button
+                type="button"
+                key={shoe.id}
+                onClick={() => setSelectedShoeId(shoe.id)}
+                style={{
+                  textAlign: "left",
+                  padding: "12px",
+                  borderRadius: "12px",
+                  border:
+                    selectedShoeId === shoe.id
+                      ? "2px solid #123D32"
+                      : "1px solid #E7E7DF",
+                  background:
+                    selectedShoeId === shoe.id ? "#F0F4EF" : "white",
+                  cursor: "pointer",
+                  position: "relative",
+                }}
+              >
+                <img
+                  src={shoe.image}
+                  alt={shoe.name}
+                  style={{
+                    width: "100%",
+                    height: "145px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+
+                {selectedShoeId === shoe.id && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "18px",
+                      right: "18px",
+                      background: "#123D32",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: "27px",
+                      height: "27px",
+                      display: "grid",
+                      placeItems: "center",
+                    }}
+                  >
+                    <Check size={16} />
+                  </span>
+                )}
+
+                <p
+                  style={{
+                    color: "#777B72",
+                    fontSize: "12px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {shoe.brand}
+                </p>
+
+                <h3
+                  style={{
+                    color: "#20352D",
+                    fontSize: "15px",
+                    margin: "5px 0",
+                  }}
+                >
+                  {shoe.name}
+                </h3>
+
+                <strong style={{ color: "#123D32" }}>
+                  PKR {shoe.price.toLocaleString()}
+                </strong>
+              </button>
+            ))}
           </div>
         </section>
+
+        {/* Selected Shoe Details */}
+        {selectedShoe && (
+          <section
+            style={{
+              marginTop: "35px",
+              padding: "22px",
+              background: "white",
+              border: "1px solid #E7E7DF",
+              borderRadius: "14px",
+            }}
+          >
+            <p className="shoe-eyebrow">YOUR SELECTED PAIR</p>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <img
+                src={selectedShoe.image}
+                alt={selectedShoe.name}
+                style={{
+                  width: "150px",
+                  height: "120px",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                }}
+              />
+
+              <div>
+                <h3 style={{ color: "#123D32" }}>
+                  {selectedShoe.name}
+                </h3>
+
+                <p>{selectedShoe.brand}</p>
+
+                <strong>
+                  PKR {selectedShoe.price.toLocaleString()}
+                </strong>
+
+                <p style={{ marginTop: "8px", color: "#777B72" }}>
+                  {selectedShoe.color}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
 
         <p className="shoe-disclaimer">
           Simulation preview — not a guaranteed fit or size measurement.
